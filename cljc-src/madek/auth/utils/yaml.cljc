@@ -8,6 +8,7 @@
 
 (defn parse [s]
   (clojure.walk/keywordize-keys
-    #?(:clj  (yaml/parse-string s)
+    #?(:clj  (-> s yaml/parse-string)
        :cljs (-> s yaml/load js->clj))))
+
 

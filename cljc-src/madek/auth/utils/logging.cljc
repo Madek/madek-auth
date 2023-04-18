@@ -7,6 +7,7 @@
 
 (def LOGGING_CONFIG
   {:min-level [[#{
+                  "madek.auth.main" 
                   "madek.auth.routing.*"
                   ;"madek.auth.http.static-resources" 
                   } :debug]

@@ -13,9 +13,9 @@
 (def cli-options
   (concat
     [["-h" "--help"]
-     [nil "--dev-mode DEV_MODE" "dev mode"
+     [nil "--dev-mode DEV_MODE" "dev mode true|false yaml boolean"
       :default (or (some-> :dev-mode env yaml/parse) false)
-      :parse-fn #(yaml/parse)
+      :parse-fn yaml/parse 
       :validate [boolean? "Must parse to a boolean"]]]
     repl/cli-options))
 
