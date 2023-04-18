@@ -8,7 +8,7 @@ windows:
       # export LOGGING_CONFIG_FILE=log-conf-dev.edn
       # we need do wait for the front-end to build the assets before we start up
       sleep 30
-      ./bin/clj-run server run
+      ./bin/clj-dev server
   3:
     name: front-repl-run
     command: |
