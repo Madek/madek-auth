@@ -1,4 +1,5 @@
 require 'rails/all'
+require 'factory_bot_rails'
 
 ENV['RAILS_ENV'] = ENV['RAILS_ENV'].presence || 'test'
 
@@ -13,6 +14,8 @@ module Madek
     ]
 
     config.paths['config/database'] = ['datalayer/config/database.yml']
+    config.factory_bot.definition_file_paths << 'datalayer/spec/factories'
+
   end
 end
 

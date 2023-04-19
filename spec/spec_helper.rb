@@ -1,5 +1,4 @@
 require 'capybara/rspec'
-require 'factory_bot'
 require 'faker'
 require 'pry'
 require 'rspec'
@@ -26,6 +25,7 @@ RSpec.configure do |config|
     $logger.info "SPEC_SEED='#{@spec_seed}'"
   end
 
-  config.include FactoryBot::Syntax::Methods
+  #config.include FactoryBot::Syntax::Methods
 end
+
 
