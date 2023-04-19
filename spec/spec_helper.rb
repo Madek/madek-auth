@@ -7,12 +7,10 @@ require 'selenium-webdriver'
 require 'logger'
 
 require 'config/rails'
-ENV['RAILS_ENV'] = ENV['RAILS_ENV'].presence || 'test'
-
+require 'config/database'
 
 $logger = logger = Logger.new(STDOUT)
 logger.level = Logger::INFO
-
 
 RSpec.configure do |config|
 

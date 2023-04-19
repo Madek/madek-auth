@@ -2,8 +2,11 @@
 set -euo pipefail
 
 PROJECT_DIR="$(cd -- "$(dirname "${BASH_SOURCE}")" ; cd .. > /dev/null 2>&1 && pwd -P)"
-${PROJECT_DIR}/bin/env/ruby-setup
+cd ${PROJECT_DIR}
 
+./datalayer/bin/db-set-env
+
+./bin/env/ruby-setup
 bundle exec rspec "$@"
 
 # vi: ft=sh
