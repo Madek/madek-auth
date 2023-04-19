@@ -12,7 +12,7 @@ windows:
   3:
     name: front-repl-run
     command: |
-      ./bin/cljs-watch-app
+      ./bin/cljs-watch
   5:
     name: psql
     command: |

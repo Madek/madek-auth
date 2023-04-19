@@ -1,9 +1,6 @@
-# frozen_string_literal: true
-source "https://rubygems.org"
+eval_gemfile 'datalayer/Gemfile'
 
-gem "pry", "~> 0.14.1"
-gem "activesupport", "~> 6.0"
-
-gem "capybara"
-gem "rspec"
-
+gem 'capybara'
+gem 'puma'
+gem 'rspec'
+gem 'selenium-webdriver'
