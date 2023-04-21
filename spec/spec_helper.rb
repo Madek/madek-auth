@@ -1,14 +1,14 @@
 require 'capybara/rspec'
 require 'faker'
+require 'logger'
 require 'pry'
 require 'rspec'
-require 'selenium-webdriver'
-require 'logger'
 
 require 'lib/crypto'
 
 require 'config/rails'
 require 'config/database'
+require 'config/browser'
 
 
 $logger = logger = Logger.new(STDOUT)

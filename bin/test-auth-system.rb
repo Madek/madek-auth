@@ -68,6 +68,54 @@ class MadekAuthService < Sinatra::Application
     'Hello world!'
   end
 
+
+  get '/sign-in' do
+    sign_in_request_token = params[:token]
+    # TODO do verify, catch and redirect back with error
+    token_data = JWT.decode sign_in_request_token, public_key, true, { algorithm: 'ES256' }
+    email = token_data.first["email"]
+
+    success_token = JWT.encode({
+      sign_in_request_token: sign_in_request_token,
+      email: email,
+      success: true}, private_key, 'ES256')
+
+    fail_token = JWT.encode({
+      sign_in_request_token: sign_in_request_token,
+      error_message: "The user did not authenticate successfully!"}, private_key, 'ES256')
+
+    url = (token_data.first["server_base_url"] || 'http://localhost:3240') + token_data.first['path']
+
+
+    html =
+      Haml::Engine.new(
+        <<-HAML.strip_heredoc
+        %h1 The Super Secure Test Authentication System
+
+        %p
+          Answer truthfully! Are you
+          %em
+            #{email}
+          ?
+        %ul
+          %li
+            %a{href: "#{url}?token=#{success_token}"}
+              %span
+                Yes, I am
+                %em
+                  #{email}
+          %li
+            %a{href: "#{url}?token=#{fail_token}"}
+              %span
+                No, I am not
+                %em
+                  #{email}
+    HAML
+      ).render
+
+      html
+  end
+
   run!
 end
 
