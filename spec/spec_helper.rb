@@ -5,8 +5,11 @@ require 'rspec'
 require 'selenium-webdriver'
 require 'logger'
 
+require 'lib/crypto'
+
 require 'config/rails'
 require 'config/database'
+
 
 $logger = logger = Logger.new(STDOUT)
 logger.level = Logger::INFO
