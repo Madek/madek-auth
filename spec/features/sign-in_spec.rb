@@ -21,7 +21,7 @@ feature 'Sign in' do
 
   end
 
-  scenario 'foo' do
+  scenario 'Sign-in' do
     visit '/auth/sign-in'
     binding.pry
   end
