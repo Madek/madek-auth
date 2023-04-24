@@ -43,17 +43,16 @@
 
 #?(:cljs
    (defn navigate!
-     ([url]
-      (client-navigation/navigate! url nil))
-     ([url event &{:keys [reload]
-                   :or {reload false}}]
-      (if reload
-        (set! js/window.location url)
-        (client-navigation/navigate! url event)))))
+     [url event &{:keys [reload]
+                  :or {reload false}}]
+     (warn 'navigate! [url event reload])
+     (if reload
+       (set! js/window.location url)
+       (client-navigation/navigate! url event))))
 
 
 (comment
-  (->> [:sign-in {:email "foo@bar.com"} ]
+  (->> [:sign-in {} {:email "foo@bar.com"} ]
        spy
        (apply path)
        spy
