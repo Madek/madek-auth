@@ -3,11 +3,12 @@
     [clj-yaml.core :as yaml]
     [logbug.debug :as debug :refer [I>]]
     [logbug.ring :refer [wrap-handler-with-logging]]
+    [madek.auth.db.core :as db]
     [madek.auth.html.spa.main :as spa]
     [madek.auth.http.anti-csrf.main :as anti-csrf]
     [madek.auth.http.static-resources :as static-resources]
-    [madek.auth.resources.sign-in.main :as sign-in]
     [madek.auth.routes :as routes]
+    [madek.auth.routing.resolve :refer [resolve-table]]
     [ring.middleware.accept]
     [ring.middleware.content-type :refer [wrap-content-type]]
     [ring.middleware.cookies]
@@ -25,9 +26,7 @@
 
 ;;; routes ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(def resolve-table
-  {:sign-in #'sign-in/handler
-   })
+
 
 (defn route-resolve [handler request]
   (debug 'route-resolve (:uri request))
@@ -106,6 +105,7 @@
   (I> wrap-handler-with-logging
       not-found-handler
       wrap-route-dispatch
+      db/wrap-tx
       anti-csrf/wrap
       ring.middleware.keyword-params/wrap-keyword-params
       ring.middleware.params/wrap-params

@@ -14,10 +14,10 @@
 
 (defonce data* (ratom {}))
 
-(defn request []
+(defn request-auth-systems []
   (info 'request)
   (go (-> 
-        {:url (path :sign-in {} (select-keys @data*  [:email]))}
+        {:url (path :sign-in-auth-systems {} (select-keys @data*  [:email]))}
         http-client/request :chan <!
         http-client/filter-success! :body )
       ))
@@ -30,7 +30,7 @@
      {:on-submit (fn [e]
                    (.preventDefault e)
                    (info :on-submit)
-                   (request)
+                   (request-auth-systems)
                    ;(navigate! (path :sign-in {} 
                    ;                 {:email (get-in @data* [:email])})
                    ;           e :reload true)

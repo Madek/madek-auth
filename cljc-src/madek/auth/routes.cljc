@@ -16,7 +16,8 @@
   [["/auth/" 
     ["" {:name :auth}]
     ["sign-in/" {}
-     ["" {:name :sign-in}]]]])
+     ["" {:name :sign-in}]
+     ["auth-systems/" {:name :sign-in-auth-systems}]]]])
 
 
 (def router (reitit/router routes))
