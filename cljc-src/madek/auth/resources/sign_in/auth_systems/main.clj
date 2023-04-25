@@ -4,4 +4,5 @@
 
 (defn handler [{:as request}]
   (info request)
-  {:status 444})
+  {:body {:foo 42}}
+  )

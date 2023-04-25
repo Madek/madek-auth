@@ -13,6 +13,7 @@
     [ring.middleware.content-type :refer [wrap-content-type]]
     [ring.middleware.cookies]
     [ring.middleware.json]
+    [ring.middleware.json]
     [ring.middleware.keyword-params]
     [ring.middleware.params]
     [taoensso.timbre :refer [debug error info spy warn]]))
@@ -105,6 +106,8 @@
   (I> wrap-handler-with-logging
       not-found-handler
       wrap-route-dispatch
+      ring.middleware.json/wrap-json-response
+      (ring.middleware.json/wrap-json-body {:keywords? true})
       db/wrap-tx
       anti-csrf/wrap
       ring.middleware.keyword-params/wrap-keyword-params
