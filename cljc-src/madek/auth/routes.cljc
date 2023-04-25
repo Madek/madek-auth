@@ -1,6 +1,7 @@
 (ns madek.auth.routes
   (:require
     #?(:cljs [madek.auth.html.history-navigation :as client-navigation :refer []])
+    [clojure.walk :refer [stringify-keys]]
     [cuerdas.core :as string :refer []]
     [madek.auth.utils.query-params :as query-params]
     [reitit.coercion]
@@ -38,7 +39,7 @@
                   (reitit/match-by-name
                     router kw route-params))]
      (if (seq query-params)
-       (str p "?" (query-params/encode query-params))
+       (str p "?" (-> query-params stringify-keys query-params/encode))
        p))))
 
 #?(:cljs

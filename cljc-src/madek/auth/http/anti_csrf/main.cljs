@@ -4,8 +4,11 @@
     [goog.net.Cookies]
     ))
 
+
+(defonce ^:dynamic *cookies* (or goog.net.cookies (.getInstance goog.net.Cookies)))
+
 (defn token []
-  (.get goog.net.Cookies ANTI_CRSF_TOKEN_COOKIE_NAME))
+  (.get *cookies* ANTI_CRSF_TOKEN_COOKIE_NAME))
 
 (defn hidden-form-group-token-component []
   [:div.form-group

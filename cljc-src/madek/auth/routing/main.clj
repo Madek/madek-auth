@@ -107,6 +107,8 @@
       not-found-handler
       wrap-route-dispatch
       anti-csrf/wrap
+      ring.middleware.keyword-params/wrap-keyword-params
+      ring.middleware.params/wrap-params
       spa/wrap
       ring.middleware.cookies/wrap-cookies
       (static-resources/wrap

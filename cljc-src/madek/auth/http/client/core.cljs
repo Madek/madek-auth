@@ -1,11 +1,9 @@
 (ns madek.auth.http.client.core
   (:refer-clojure :exclude [str keyword send-off])
-  (:require-macros
-    [reagent.ratom :as ratom :refer [reaction]]
-    [cljs.core.async.macros :refer [go go-loop]])
   (:require
     [cljs-http.client :as http-client]
     [cljs-uuid-utils.core :as uuid]
+    [cljs.core.async :refer [go go-loop]]
     [cljs.core.async :as async :refer [timeout]]
     [clojure.pprint :refer [pprint]]
     [clojure.string :as str]
@@ -16,7 +14,7 @@
     [madek.auth.http.anti-csrf.main :as anti-csrf]
     [madek.auth.http.shared :refer [ANTI_CRSF_TOKEN_COOKIE_NAME HTTP_SAFE_METHODS]]
     [reagent.core :as reagent]
-    [taoensso.timbre :as logging]
+    [taoensso.timbre :refer [debug error info spy warn]]
     ))
 
 (def base-delay* (reagent/atom 0))
@@ -108,7 +106,7 @@
        [state/hidden-routing-state-component
         :did-mount (fn [& _]
                      (if (:chan req-opts)
-                       (logging/error ":chan may not be set for managed request-response-component")
+                       (error ":chan may not be set for managed request-response-component")
                        (let [chan (async/chan)]
                          (reset! req* (request (assoc req-opts
                                                       :chan chan
@@ -129,7 +127,7 @@
   (let [route (:route @state/routing*)
         chan (async/chan)]
     (go-loop [do-fetch true]
-             ;(logging/info 'route-cached-fetch 'go-loop {:route route})
+             ;(info 'route-cached-fetch 'go-loop {:route route})
              (when do-fetch
                (let [req (request {:chan chan
                                    :url route})

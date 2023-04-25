@@ -1,7 +1,9 @@
 (ns madek.auth.resources.sign-in.main
   (:require
     [cljs.pprint :refer [pprint]]
+    [cljs.core.async :refer [go go-loop]]
     [madek.auth.html.forms.core :as forms]
+    [madek.auth.http.client.core :as http-client]
     [madek.auth.routes :refer [navigate! path]]
     [madek.auth.state :as state :refer [debug?*]]
     [madek.auth.utils.core :refer [presence]]
@@ -12,6 +14,13 @@
 
 (defonce data* (ratom {}))
 
+(defn request []
+  (info 'request)
+  (go (-> 
+        {:url (path :sign-in {} (select-keys @data*  [:email]))}
+        http-client/request :chan <!
+        http-client/filter-success! :body )
+      ))
 
 (defn email-form []
   [:div.row
@@ -21,23 +30,23 @@
      {:on-submit (fn [e]
                    (.preventDefault e)
                    (info :on-submit)
-                   (navigate! (path :sign-in {} 
-                                    {:email (get-in @data* [:email])})
-                              e :reload true))}
+                   (request)
+                   ;(navigate! (path :sign-in {} 
+                   ;                 {:email (get-in @data* [:email])})
+                   ;           e :reload true)
+                   
+                   )}
      [:div.mb-3
       [:label.col-form-label {:for :email}  
-       "Supply your " [:b "email address "] " to sign in" ]
+       "Provide your " [:b "email address "] " to sign in" ]
       [:input.form-control 
        {:id :email
+        :type :email
         :value (get-in @data* [:email])
-        :on-change #(-> % .-target .-value presence (forms/set-value data* [:email]))
-        }
-       ]]
+        :on-change #(-> % .-target .-value presence (forms/set-value data* [:email]))}]]
      [:div.d-flex.mb-3
       [:div.ms-auto
-       [:button.btn.btn-primary {:type :submit} "Continue"]]]
-
-     ]]
+       [:button.btn.btn-primary {:type :submit} "Continue"]]]]]
    [:div.col-md-3]])
 
 (defn page-debug []
@@ -53,6 +62,7 @@
 
 (defn page []
   [:div
+   [:h1.text-center "Sign in"]
    [email-form]
    [page-debug]])
 
