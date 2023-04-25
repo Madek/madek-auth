@@ -30,8 +30,9 @@
       [:input.form-control 
        {:id :email
         :value (get-in @data* [:email])
-        :on-change #(-> % .-target .-value presence
-                        (forms/set-value data* [:email]))}]]
+        :on-change #(-> % .-target .-value presence (forms/set-value data* [:email]))
+        }
+       ]]
      [:div.d-flex.mb-3
       [:div.ms-auto
        [:button.btn.btn-primary {:type :submit} "Continue"]]]

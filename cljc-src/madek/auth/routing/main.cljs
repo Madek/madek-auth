@@ -3,7 +3,6 @@
     [clojure.pprint :refer [pprint]]
     [madek.auth.html.history-navigation :as navigation]
     [madek.auth.routes :as routes :refer [path]]
-    ;[madek.auth.routing-resolver :refer [route-page-table]]
     [madek.auth.routing.resolve :refer [routes-resources]]
     [madek.auth.state :as state]
     [madek.auth.utils.url :as url]

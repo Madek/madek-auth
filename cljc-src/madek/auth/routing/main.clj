@@ -1,10 +1,13 @@
 (ns madek.auth.routing.main
   (:require
     [clj-yaml.core :as yaml]
+    [logbug.debug :as debug :refer [I>]]
+    [logbug.ring :refer [wrap-handler-with-logging]]
+    [madek.auth.html.spa.main :as spa]
+    [madek.auth.http.anti-csrf.main :as anti-csrf]
+    [madek.auth.http.static-resources :as static-resources]
     [madek.auth.resources.sign-in.main :as sign-in]
     [madek.auth.routes :as routes]
-    [madek.auth.html.spa.main :as spa]
-    [madek.auth.http.static-resources :as static-resources]
     [ring.middleware.accept]
     [ring.middleware.content-type :refer [wrap-content-type]]
     [ring.middleware.cookies]
@@ -100,12 +103,11 @@
 
 
 (defn build-routes [options]
-  (-> not-found-handler
+  (I> wrap-handler-with-logging
+      not-found-handler
       wrap-route-dispatch
+      anti-csrf/wrap
       spa/wrap
-      wrap-route-resolve
-      wrap-accept
-      wrap-add-vary-header
       ring.middleware.cookies/wrap-cookies
       (static-resources/wrap
         "" {:allow-symlinks? true
@@ -114,6 +116,9 @@
             [#".*[^\/]*\d+\.\d+\.\d+.+"  ; match semver in the filename
              #".+\.[0-9a-fA-F]{32,}\..+"] ; match MD5, SHAx, ... in the filename
             :cache-enabled? (not (:dev-mode options))})
+      wrap-route-resolve
+      wrap-accept
+      wrap-add-vary-header
       wrap-exception
       wrap-content-type))
 

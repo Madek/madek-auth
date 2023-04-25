@@ -12,9 +12,9 @@
 (def coerce-params reitit.coercion/coerce!)
 
 (def routes 
-  [["/auth" 
+  [["/auth/" 
     ["" {:name :auth}]
-    ["/sign-in" {}
+    ["sign-in/" {}
      ["" {:name :sign-in}]]]])
 
 

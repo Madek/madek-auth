@@ -3,8 +3,10 @@
  {
   clj-commons/clj-yaml {:mvn/version "1.0.26"}
   clj-pid/clj-pid {:mvn/version "0.1.2"}
+  cljs-http/cljs-http {:mvn/version "0.1.46"}
   com.github.seancorfield/honeysql {:mvn/version "2.4.1006"}
   com.github.seancorfield/next.jdbc {:mvn/version "1.3.862"}
+  com.lucasbradstreet/cljs-uuid-utils {:mvn/version "1.0.2"}
   com.taoensso/timbre {:mvn/version "6.1.0"}
   com.zaxxer/HikariCP {:mvn/version "5.0.1"}
   digest/digest {:mvn/version "1.4.10"}

@@ -10,6 +10,7 @@
                   ;"madek.auth.main" 
                   "madek.auth.routes"
                   "madek.auth.html.history-navigation"
+                  "madek.auth.routing.main"
                   ;"madek.auth.routing.*"
                   ;"madek.auth.http.static-resources" 
                   } :debug]
