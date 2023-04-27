@@ -20,7 +20,8 @@
     [:> bs/Nav.Item [:> bs/Nav.Link {:href (path :sign-in)} [:div] " Sign-in"]]
     ]
    [:> bs/Container {:class "justify-content-end"}
-    [navbar-user {}]]])
+    ;[navbar-user {}]
+    ]])
 
 
 (defn footer []

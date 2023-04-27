@@ -13,6 +13,13 @@
 
 (defonce data* (ratom {}))
 
+(defn continue [event]
+  (navigate! (path :sign-in-auth-systems  
+                   {:email (get-in @data* [:email])}
+                   (some-> @state/state* :routing 
+                           :query-params (select-keys [:redirect-to])))
+             event))
+
 (defn email-form []
   [:div.row
    [:div.col-md-3]
@@ -21,11 +28,7 @@
      {:on-submit (fn [e]
                    (.preventDefault e)
                    (info :on-submit)
-                   (navigate! (path :sign-in-auth-systems  
-                                    {:email (get-in @data* [:email])}
-                                    (some-> @state/state* :routing 
-                                            :query-params (select-keys [:redirect-to])))
-                              e :reload true))}
+                   (continue e))}
      [:div.mb-3
       [:label.col-form-label {:for :email}  
        "Provide your " [:b "email address "] " to sign in" ]
@@ -40,19 +43,17 @@
    [:div.col-md-3]])
 
 (defn page-debug []
-       [:<> (when @debug?*
-              [:div.debug
-               [:hr]
-               [:h4 "Page debug"]
-               [:pre.bg-light
-                [:code
-                 (with-out-str (pprint @data*))
-                 ]]
-               ])])
+  [:<> (when @debug?*
+         [:div.debug
+          [:hr]
+          [:h4 "Page debug"]
+          [:pre.bg-light
+           [:code
+            (with-out-str (pprint @data*))]]])])
 
 (defn page []
   [:div
-   [:h1.text-center "Sign in"]
+   [:h1.text-center "Sign-in: provide e-mail address"]
  [email-form]
  [page-debug]])
 

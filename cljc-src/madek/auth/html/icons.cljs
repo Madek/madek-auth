@@ -12,6 +12,8 @@
 ;      fa-free-solid-svg-icons/faSync)
 
 
+(defn back [] (FontAwesomeIcon #js{:icon fa-free-solid-svg-icons/faCircleLeft :className ""}))
+
 (defn add [] (FontAwesomeIcon #js{:icon fa-free-solid-svg-icons/faPlusSquare :className ""}))
 (def create add)
 (defn admin-interface [] (FontAwesomeIcon #js{:icon fa-free-solid-svg-icons/faCog :className ""}))
