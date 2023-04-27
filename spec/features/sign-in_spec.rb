@@ -19,10 +19,18 @@ feature 'Sign in' do
       external_public_key: ext_auth_key_pair.public_key,
       external_private_key: nil
 
+    @user = FactoryBot.create :user
+
+    @auth_system.users << @user
+
+
   end
 
   scenario 'Sign-in' do
-    visit '/auth/sign-in'
+    visit '/auth/sign-in?redirect-to=%2Fauth%2Finfo&foo=42'
+    fill_in 'email', with: @user.email
+    click_on 'Continue'
+
     binding.pry
   end
 

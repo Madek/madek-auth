@@ -1,6 +1,8 @@
 (ns madek.auth.routing.main
   (:require
     [clojure.pprint :refer [pprint]]
+    [clojure.walk :refer [keywordize-keys]]
+    [cuerdas.core :as str]
     [madek.auth.html.history-navigation :as navigation]
     [madek.auth.routes :as routes :refer [path]]
     [madek.auth.routing.resolve :refer [routes-resources]]
@@ -21,10 +23,13 @@
       (assoc state :page (-> component :page))
       (assoc state :center-nav (-> component :center-nav))
       (assoc state :page-nav (-> component :page-nav))
-      (assoc state :query-params (some->> url :query url/decode))
-      (assoc state :query-params-parsed (some->> state :query-params
-                                                 (map (fn [[k v]] [k (yaml/parse v)]))
-                                                 (into {})))
+      (assoc state :query (some->> url :query))
+      (assoc state :query-params (some-> url :query 
+                                         (str/split "&")
+                                         (some->> (map #(str/split % "=" 2))
+                                                  (into {})
+                                                  keywordize-keys)))
+;     (assoc state :query-params-parsed (some->> state :query-params (map (fn [[k v]] [k (yaml/parse v)])) (into {})))
       (assoc state :route (path (:name state)
                                 (:path-params state)
                                 (:query-params state)))

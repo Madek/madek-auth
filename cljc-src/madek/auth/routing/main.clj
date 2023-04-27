@@ -13,9 +13,8 @@
     [ring.middleware.content-type :refer [wrap-content-type]]
     [ring.middleware.cookies]
     [ring.middleware.json]
-    [ring.middleware.json]
-    [ring.middleware.keyword-params]
-    [ring.middleware.params]
+    [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+    [ring.middleware.params :refer [wrap-params]]
     [taoensso.timbre :refer [debug error info spy warn]]))
 
 
@@ -106,12 +105,13 @@
   (I> wrap-handler-with-logging
       not-found-handler
       wrap-route-dispatch
+      wrap-route-resolve
       ring.middleware.json/wrap-json-response
       (ring.middleware.json/wrap-json-body {:keywords? true})
       db/wrap-tx
       anti-csrf/wrap
-      ring.middleware.keyword-params/wrap-keyword-params
-      ring.middleware.params/wrap-params
+      wrap-keyword-params
+      wrap-params
       spa/wrap
       ring.middleware.cookies/wrap-cookies
       (static-resources/wrap
@@ -121,7 +121,6 @@
             [#".*[^\/]*\d+\.\d+\.\d+.+"  ; match semver in the filename
              #".+\.[0-9a-fA-F]{32,}\..+"] ; match MD5, SHAx, ... in the filename
             :cache-enabled? (not (:dev-mode options))})
-      wrap-route-resolve
       wrap-accept
       wrap-add-vary-header
       wrap-exception

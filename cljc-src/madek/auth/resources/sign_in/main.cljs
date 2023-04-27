@@ -11,16 +11,7 @@
     [taoensso.timbre :refer [debug error info spy warn]]))
 
 
-
 (defonce data* (ratom {}))
-
-(defn request-auth-systems []
-  (info 'request)
-  (go (-> 
-        {:url (path :sign-in-auth-systems {} (select-keys @data*  [:email]))}
-        http-client/request :chan <!
-        http-client/filter-success! :body )
-      ))
 
 (defn email-form []
   [:div.row
@@ -30,12 +21,11 @@
      {:on-submit (fn [e]
                    (.preventDefault e)
                    (info :on-submit)
-                   (request-auth-systems)
-                   ;(navigate! (path :sign-in {} 
-                   ;                 {:email (get-in @data* [:email])})
-                   ;           e :reload true)
-                   
-                   )}
+                   (navigate! (path :sign-in-auth-systems  
+                                    {:email (get-in @data* [:email])}
+                                    (some-> @state/state* :routing 
+                                            :query-params (select-keys [:redirect-to])))
+                              e :reload true))}
      [:div.mb-3
       [:label.col-form-label {:for :email}  
        "Provide your " [:b "email address "] " to sign in" ]
@@ -63,8 +53,8 @@
 (defn page []
   [:div
    [:h1.text-center "Sign in"]
-   [email-form]
-   [page-debug]])
+ [email-form]
+ [page-debug]])
 
 
 (def components 

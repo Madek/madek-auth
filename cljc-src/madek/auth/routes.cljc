@@ -13,11 +13,15 @@
 (def coerce-params reitit.coercion/coerce!)
 
 (def routes 
-  [["/auth/" 
+  [["/auth" 
     ["" {:name :auth}]
-    ["sign-in/" {}
+    ["/sign-in" {}
      ["" {:name :sign-in}]
-     ["auth-systems/" {:name :sign-in-auth-systems}]]]])
+     ["/:email/auth-systems/" {:name :sign-in-auth-systems}]]
+    ["/systems/:ext_auth_id"
+     ["/request" {:name :ext-auth-request}]
+     ["/sign-in" {:name :ext-auth-sign-in}]
+     ]]])
 
 
 (def router (reitit/router routes))
