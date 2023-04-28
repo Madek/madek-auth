@@ -26,8 +26,10 @@ feature 'Sign in' do
     @auth_system = FactoryBot.create :auth_system,
       id: ext_auth_id,
       name: ext_auth_name,
+      external_sign_in_url: "http://localhost:#{ext_auth_port}/sign-in",
       external_public_key: ext_auth_key_pair.public_key,
-      external_private_key: nil
+      external_private_key: nil,
+      enabled: true
 
     @user = FactoryBot.create :user
 

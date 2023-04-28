@@ -29,6 +29,7 @@
                            [:users.email :email] 
                            [:users.login :login])
       (sql/where auth-systems-users-sql-cond)
+      (sql/where [:= :auth_systems.enabled true])
       (sql/where [:= [:lower :users.email] [:lower email]])))
 
 (comment
