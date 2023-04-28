@@ -1,9 +1,11 @@
 (ns madek.auth.resources.sign-in.auth-systems.auth-system-request.main
   (:require
-    [next.jdbc :as jdbc]
-    [madek.auth.db.core :refer [get-ds]]
+    [buddy.core.keys :as keys]
+    [buddy.sign.jwt :as jwt]
     [honey.sql :refer [format] :rename {format sql-format}]
     [honey.sql.helpers :as sql]
+    [madek.auth.db.core :refer [get-ds]]
+    [next.jdbc :as jdbc]
     [taoensso.timbre :refer [debug error info spy warn]]))
 
 
