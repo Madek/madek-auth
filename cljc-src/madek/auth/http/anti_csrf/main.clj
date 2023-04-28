@@ -1,12 +1,11 @@
 (ns madek.auth.http.anti-csrf.main
   (:require
+    [logbug.debug :refer [debug-ns]]
     [madek.auth.http.shared :refer [ANTI_CRSF_TOKEN_COOKIE_NAME HTTP_UNSAFE_METHODS HTTP_SAFE_METHODS]]
     [madek.auth.utils.core :refer [presence]]
-    [logbug.debug]
-    )
+    [taoensso.timbre :refer [debug info warn error spy]])
   (:import
-    [java.util UUID]
-    ))
+    [java.util UUID]))
 
 (defn http-safe? [request]
   (boolean (-> request :request-method HTTP_SAFE_METHODS)))
@@ -39,7 +38,7 @@
                              "anti-csrf cookie value.") {:status 403}))))
     (let [response (handler request)]
       (if (and (not anti-csrf-token)
-               (some-> response :headers (get "Content-Type") (clojure.string/starts-with? "text/html")))
+               (some-> response :headers spy (get "Content-Type") (clojure.string/starts-with? "text/html")))
         (assoc-in response [:cookies ANTI_CRSF_TOKEN_COOKIE_NAME]
                   {:value (str (UUID/randomUUID))
                    :http-only false
@@ -51,3 +50,6 @@
   (fn [request]
     (anti-csrf-middleware handler request)))
 
+
+;;; debug ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(debug-ns *ns*)

@@ -3,7 +3,7 @@ require 'selenium-webdriver'
 
 
 BROWSER_DOWNLOAD_DIR= File.absolute_path(File.expand_path(__FILE__)  + "/../../../tmp")
-
+nsp
 def http_port
   @port ||= Integer(ENV['MADEK_AUTH_HTTP_PORT'].presence || 3105)
 end

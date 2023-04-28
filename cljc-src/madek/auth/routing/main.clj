@@ -109,10 +109,10 @@
       ring.middleware.json/wrap-json-response
       (ring.middleware.json/wrap-json-body {:keywords? true})
       db/wrap-tx
-      anti-csrf/wrap
       wrap-keyword-params
       wrap-params
       spa/wrap
+      anti-csrf/wrap
       ring.middleware.cookies/wrap-cookies
       (static-resources/wrap
         "" {:allow-symlinks? true

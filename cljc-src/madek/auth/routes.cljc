@@ -17,8 +17,10 @@
     ["" {:name :auth}]
     ["/sign-in" {}
      ["" {:name :sign-in}]
-     ["/:email/auth-systems/" {:name :sign-in-auth-systems}]]
-    ["/systems/:ext_auth_id"
+     ["/:email/auth-systems/" 
+      ["" {:name :sign-in-auth-systems}]
+      [":auth_system_id/request" :sign-in-auth-system-request]]]
+    ["/systems/:auth_system_id"
      ["/request" {:name :ext-auth-request}]
      ["/sign-in" {:name :ext-auth-sign-in}]
      ]]])

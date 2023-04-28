@@ -8,11 +8,13 @@
     [madek.auth.routes :refer [navigate! path]]
     [madek.auth.state :as state :refer [debug?* hidden-routing-state-component]]
     [madek.auth.utils.core :refer [presence]]
-    [reagent.core :as reagent :rename {atom ratom}]
+    [reagent.core :as reagent :refer [reaction] :rename {atom ratom}]
     [taoensso.timbre :refer [debug error info spy warn]]))
 
 
 (defonce data* (ratom nil))
+
+(defonce email* (reaction (some-> @state/state* :routing :path-params :email)))
 
 (defn request-auth-systems [& _]
   (reset! data* nil)
@@ -30,17 +32,29 @@
            [:code
             (with-out-str (pprint @data*))]]])])
 
+(defn auth-system [sys]
+  [:div.my-2.d-flex.align-items-center.justify-content-center  
+   [:div 
+    [:a.btn.btn-primary
+     {:href (spy (path :sign-in-auth-system-request  
+                       {:auth_system_id (:auth_system_id sys)
+                        :email @email*}
+                       (merge {} (:query-params @state/routing*))))}
+     (:auth_system_name sys)]]])
+
 (defn auth-systems []
-  [:div 
+  [:div.my-5
    (for [sys @data*]
      ^{:key (:auth_system_id sys)} 
-     [:div  (:auth_system_name sys)]) ])
+     [auth-system sys])])
 
 (defn page []
   [:div
    [hidden-routing-state-component
     :did-change request-auth-systems]
-   [:h1.text-center "Sign-in: choose an authentication method"]
+   [:h1.text-center "Sign-in: choose an authentication method"
+    [:<> (when-let [email @email*]
+           [:span " for " [:code email]])]]
    (cond 
      (nil? @data*)  [:div [:h2 "Wait"]]
      (empty? @data*) [:div [:h2 "Oh No No"]]
