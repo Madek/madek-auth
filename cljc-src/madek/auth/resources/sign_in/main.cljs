@@ -17,7 +17,7 @@
   (navigate! (path :sign-in-auth-systems  
                    {:email (get-in @data* [:email])}
                    (some-> @state/state* :routing 
-                           :query-params (select-keys [:redirect-to])))
+                           :query-params (select-keys [:return-to])))
              event))
 
 (defn email-form []

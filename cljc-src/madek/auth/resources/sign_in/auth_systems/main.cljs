@@ -61,7 +61,7 @@
      :else [:div [auth-systems]])
    [:div.d-flex.mb-3
     [:a.btn.btn-warning {:href (path :sign-in {} (some-> @state/state* :routing 
-                                                         :query-params (select-keys [:redirect-to])) )}
+                                                         :query-params (select-keys [:return-to])) )}
      [:span [icons/back] " Use a different e-mail address"]] ]
 
    [page-debug]])

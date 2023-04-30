@@ -39,7 +39,7 @@ feature 'Sign in' do
   end
 
   scenario 'Sign-in' do
-    visit '/auth/sign-in?redirect-to=%2Fauth%2Finfo&foo=42'
+    visit '/auth/sign-in?return-to=%2Fauth%2Finfo&foo=42'
     fill_in 'email', with: @user.email
     click_on 'Continue'
     click_on ext_auth_name
