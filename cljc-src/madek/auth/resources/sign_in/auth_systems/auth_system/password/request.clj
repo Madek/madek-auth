@@ -16,8 +16,9 @@
                         (sql-format :inline true)
                         (#(jdbc/execute-one! tx %)))]
     (when (nil? auth-system)
-      (throw (ex-info "Password authentication not available for user"
-                      {:status 401})))
+      (throw (let [message "Password authentication not available for user"]
+               (ex-info message
+                        {:status 401, :body {:message message}}))))
     auth-system))
 
 (defn handler [{{email-or-login :email-or-login} :params tx :tx :as request}]

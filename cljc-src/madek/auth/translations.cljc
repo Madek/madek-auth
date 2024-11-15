@@ -43,6 +43,11 @@
    :step3-submit-label ["Anmelden"
                         "Log in"]
 
+   :step4-forgot-password-label ["Passwort vergessen?"
+                                 "Forgot password?"]
+   :step4-forgot-password-send-label ["Email senden"
+                                      "Send email"]
+
    :ext-redirecting ["Automatische Weiterleitung..."
                      "Redirecting..."]
    :ext-callback-processing ["..."
