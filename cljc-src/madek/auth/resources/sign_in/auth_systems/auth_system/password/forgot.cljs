@@ -1,20 +1,17 @@
 (ns madek.auth.resources.sign-in.auth-systems.auth-system.password.forgot
   (:require
-   [cljs.core.async :refer [<! go go-loop]]
+   [cljs.core.async :refer [<! go]]
    [cljs.pprint :refer [pprint]]
-   [lambdaisland.uri :as uri]
-   [madek.auth.html.components :refer [change-username-button]]
    [madek.auth.html.forms.core :as forms]
    [madek.auth.http.client.core :as http-client]
    [madek.auth.localization :refer [translate]]
    [madek.auth.routes :refer [navigate! path]]
    [madek.auth.state :as state :refer [debug?* hidden-routing-state-component]]
-   [madek.auth.utils.core :refer [presence]]
-   [madek.auth.utils.json :as json]
    [reagent.core :as reagent :refer [reaction] :rename {atom ratom}]
-   [taoensso.timbre :refer [debug error info spy warn]]))
+   [taoensso.timbre :refer [warn]]))
 
 (def data* (ratom {}))
+(def response-data* (ratom {}))
 
 (def waiting?*
   (reaction
@@ -24,6 +21,18 @@
         last
         (#(and % (-> % :response not))))))
 
+(defn handle [response]
+  (warn response)
+  (reset! response-data* response)
+  (when (< (:status response) 300)
+    (navigate! (path :sign-in-user-auth-system-password-forgot
+                     (:path-params @state/routing*)
+                     (some-> @state/state*
+                             :routing
+                             :query-params
+                             (select-keys [:return-to :lang])))
+               :reload true)))
+
 (defn submit []
   (go (some->
         {:url (path :sign-in-user-auth-system-password-forgot
@@ -31,10 +40,9 @@
                     (select-keys @data* [:email-or-login]))
          :method :post
          :modal-on-request false
-         :modal-filter #(constantly true)}
+         :modal-on-response-error true}
        http-client/request :chan <!
-       http-client/filter-success :body
-       (navigate! "/my" :reload true))))
+       handle)))
 
 (defn page-debug []
   [:<> (when @debug?*
@@ -45,20 +53,23 @@
            [:code
             (with-out-str (pprint @data*))]]])])
 
-(defn form []
-  (let [email-or-login (get-in @state/routing* [:query-params :email-or-login])]
-    [:form
-     {:on-submit (fn [e] (.preventDefault e) (submit))}
-     [:div
-      [forms/input-component data* [:email-or-login]
-       :classes "form-row" :label (translate :step2-username-label)
-       :auto-focus? true
-       :value email-or-login]]
+(defn form [email-or-login]
+  [:form
+   {:on-submit (fn [e] (.preventDefault e) (submit))}
+   (when (some-> @response-data* :status (#(> % 300)))
      [:div.form-row
-      [:button.primary-button
-       {:type :submit}
-       (translate :step4-forgot-password-send-label)
-       (when @waiting?* "...")]]]))
+      [:div.validation-message
+       (if-let [msg (some->> @response-data* :body :error_message)] msg "Error")]])
+   [:div.form-row
+    [forms/input-component data* [:email-or-login]
+     :classes "form-row" :label (translate :step2-username-label)
+     :auto-focus? true
+     :value email-or-login]]
+   [:div.form-row
+    [:button.primary-button
+     {:type :submit}
+     (translate :step4-forgot-password-send-label)
+     (when @waiting?* "...")]]])
 
 (defn page []
   [:div.card-page
@@ -67,9 +78,16 @@
                        (get-in @state/routing* [:query-params :email-or-login]))]
    [:div.card-page__head [:h1 (translate :login-box-title)]]
    [:div.card-page__body {:style {:min-height "20em"}}
-    [:<>
-     [:h2.form-row "Receive a verification code by email to reset the password"]
-     [form]]]
+    (let [email-or-login (get-in @state/routing* [:query-params :email-or-login])]
+      (if email-or-login
+        [:<>
+         [:h2.form-row (translate :step4-forgot-password-txt)]
+         [form email-or-login]]
+        [:<>
+         [:h2.form-row (translate :step4-forgot-password-success-txt)]
+         [:div.form-row
+          [:a {:href (path :sign-in-user-auth-systems)}
+           (translate :step4-forgot-password-reset-link-label)]]]))]
    [page-debug]])
 
 (def components

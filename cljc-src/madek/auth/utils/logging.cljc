@@ -9,10 +9,12 @@
                   ;"madek.auth.http.*"
                   ;"madek.auth.http.session"
                   ;"madek.auth.main"
+                  "madek.auth.db.settings"
                   ;"madek.auth.resources.sign-in.auth-systems.auth-system.external.*"
                   ;"madek.auth.resources.sign-in.auth-systems.auth-system.external.manage"
                   ;"madek.auth.resources.sign-in.auth-systems.auth-system.external.sign-in"
                   ;"madek.auth.resources.sign-in.auth-systems.auth-system.password.*"
+                  "madek.auth.resources.sign-in.auth-systems.auth-system.password.forgot"
                   ;"madek.auth.utils.ring-audits"
                   }:debug]
                [#{#?(:clj "com.zaxxer.hikari.*")

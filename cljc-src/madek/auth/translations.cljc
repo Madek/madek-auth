@@ -45,6 +45,12 @@
 
    :step4-forgot-password-label ["Passwort vergessen?"
                                  "Forgot password?"]
+   :step4-forgot-password-txt ["Erhalten Sie einen Bestätigungscode per E-Mail, um das Passwort zurückzusetzen."
+                               "Receive a verification code by email to reset the password."]
+   :step4-forgot-password-success-txt ["Prüfen Sie Ihren E-Mail-Posteingang!"
+                                       "Check your email inbox!"]
+   :step4-forgot-password-reset-link-label ["Klicken Sie hier, um das Passwort mit dem Token in der E-Mail zurückzusetzen."
+                                            "Click here to reset the password using the token in the email."]
    :step4-forgot-password-send-label ["Email senden"
                                       "Send email"]
 
