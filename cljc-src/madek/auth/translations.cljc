@@ -54,6 +54,11 @@
    :step4-forgot-password-send-label ["Email senden"
                                       "Send email"]
 
+   :step5-reset-password-txt ["Geben Sie das geheime Token ein, welches Sie per E-Mail erhalten haben."
+                              "Enter the secret token you received by email."]
+   :step5-reset-password-input-label ["Geheimes Token"
+                                      "Secret token"]
+
    :ext-redirecting ["Automatische Weiterleitung..."
                      "Redirecting..."]
    :ext-callback-processing ["..."
