@@ -23,38 +23,47 @@
         (#(and % (-> % :response not))))))
 
 (defn handle-validate-token-response [response]
-  (warn response)
-  (reset! response-data* response))
+  (reset! response-data* response)
+  (some->> response :body :email-or-login
+           (swap! data* assoc :email-or-login)))
 
 (defn validate-token [& _]
-  (when-let [token (-> @state/routing* :query-params :token presence)]
+  (when-let [token (or (-> @state/routing* :query-params :token presence)
+                       (-> @data* :token presence))]
     (swap! data* assoc :token token)
-    (go (some->> {} http-client/request :chan <!
-                 handle-validate-token-response))))
+    (go (some-> {:url (path :sign-in-user-auth-system-password-reset
+                            (:path-params @state/routing*)
+                            (-> @data*
+                                (select-keys [:lang])
+                                (merge {:token token})))
+                 :method :get
+                 :modal-on-request false
+                 :modal-on-response-error true}
+                http-client/request :chan <!
+                handle-validate-token-response))))
 
 (defn handle [response]
-  (warn response)
   (reset! response-data* response)
   (when (< (:status response) 300)
-    (navigate! (path :sign-in-user-auth-system-password-forgot
+    (navigate! (path :sign-in-user-auth-system-password-reset
                      (:path-params @state/routing*)
-                     (some-> @state/state*
-                             :routing
-                             :query-params
-                             (select-keys [:return-to :lang])))
+                     (-> @state/routing*
+                         :routing
+                         :query-params
+                         (select-keys [:lang])
+                         (merge {:success true})))
                :reload true)))
 
 (defn submit []
-  (info "submit")
-  #_(go (some->
-          {:url (path :sign-in-user-auth-system-password-forgot
-                      (:path-params @state/routing*)
-                      (select-keys @data* [:email-or-login]))
-           :method :post
-           :modal-on-request false
-           :modal-on-response-error true}
-          http-client/request :chan <!
-          handle)))
+  (go (some->
+       {:url (path :sign-in-user-auth-system-password-reset
+                   (:path-params @state/routing*))
+        :json-params @data*
+        :method :post
+        :modal-on-request false
+        :modal-on-response-error true}
+       http-client/request :chan <!
+       handle)))
 
 (defn page-debug []
   [:<> (when @debug?*
@@ -75,10 +84,29 @@
        (if-let [msg (some->> @response-data* :body :error_message)] msg "Error")]])
    [:div.form-row
     [forms/input-component data* [:token]
-     :classes "form-row" :label (translate :step5-reset-password-input-label)
+     :classes "form-row"
+     :label (translate :step5-reset-password-token-input-label)
+     :disabled (some? (:email-or-login @data*))
      :auto-focus? true]]
+   (when (:email-or-login @data*)
+     [:<>
+      [:div.form-row
+       [forms/input-component data* [:email-or-login]
+        :classes "form-row"
+        :label (translate :step5-reset-password-username-input-label)
+        :disabled true
+        :auto-focus? true]]
+      [:div.form-row
+       [forms/input-component data* [:password]
+        :classes "form-row"
+        :label (translate :step5-reset-password-new-password-input-label)
+        :auto-focus? true]]])
    [:div.form-row
-    [:button.primary-button {:type :submit}
+    [:button.primary-button {:type :submit,
+                             :disabled (or (not (:token @data*))
+                                           (and (:email-or-login @data*)
+                                                (not (:password @data*)))
+                                           @waiting?*)}
      (translate :step1-submit-label) (when @waiting?* "...")]]])
 
 (defn page []
@@ -86,7 +114,16 @@
    [hidden-routing-state-component :did-mount validate-token]
    [:div.card-page__head [:h1 (translate :login-box-title)]]
    [:div.card-page__body {:style {:min-height "20em"}}
-    (let [email-or-login (get-in @state/routing* [:query-params :email-or-login])]
+    (if (-> @state/routing* :query-params :success)
+      [:<>
+       [:h2.form-row (translate :step5-reset-password-success-txt)]
+       [:div.form-row
+        [:a {:href (path :sign-in nil
+                         (some-> @state/routing*
+                                 :routing
+                                 :query-params
+                                 (select-keys [:lang])))}
+         (translate :step5-reset-password-login-link-label)]]]
       [:<>
        [:h2.form-row (translate :step5-reset-password-txt)]
        [form]])]

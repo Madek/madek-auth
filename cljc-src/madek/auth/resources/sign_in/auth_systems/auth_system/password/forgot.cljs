@@ -29,17 +29,17 @@
                      (:path-params @state/routing*)
                      (some-> @state/routing*
                              :query-params
-                             (select-keys [:return-to :lang])))
+                             (select-keys [:lang])))
                :reload true)))
 
 (defn submit []
   (go (some->
-        {:url (path :sign-in-user-auth-system-password-forgot
-                    (:path-params @state/routing*)
-                    (select-keys @data* [:email-or-login]))
-         :method :post
-         :modal-on-request false
-         :modal-on-response-error true}
+       {:url (path :sign-in-user-auth-system-password-forgot
+                   (:path-params @state/routing*)
+                   (select-keys @data* [:email-or-login]))
+        :method :post
+        :modal-on-request false
+        :modal-on-response-error true}
        http-client/request :chan <!
        handle)))
 

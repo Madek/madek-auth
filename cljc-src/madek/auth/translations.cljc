@@ -56,8 +56,16 @@
 
    :step5-reset-password-txt ["Geben Sie das geheime Token ein, welches Sie per E-Mail erhalten haben."
                               "Enter the secret token you received by email."]
-   :step5-reset-password-input-label ["Geheimes Token"
-                                      "Secret token"]
+   :step5-reset-password-token-input-label ["Geheimes Token"
+                                            "Secret token"]
+   :step5-reset-password-username-input-label ["Email oder Login"
+                                               "Email or login"]
+   :step5-reset-password-new-password-input-label ["Neues Passwort"
+                                                   "New password"]
+   :step5-reset-password-success-txt ["Das Passwort wurde erfolgreich zurückgesetzt."
+                                      "The password has been successfully reset."]
+   :step5-reset-password-login-link-label ["Klicken Sie hier, um sich anzumelden."
+                                           "Click here to log in."]
 
    :ext-redirecting ["Automatische Weiterleitung..."
                      "Redirecting..."]

@@ -17,8 +17,8 @@
   (reset! yaml-settings
           (try
             (let [settings (yaml/parse-string (slurp "../config/settings.yml"))]
-             (info "YAML settings:" settings)
-             settings)
+              (info "YAML settings:" settings)
+              settings)
             (catch java.io.FileNotFoundException _
               (warn "Error: ../config/settings.yml file not found.")
               nil)))

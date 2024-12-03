@@ -4,11 +4,11 @@
    [clojure.spec.alpha :as spec]
    [clojure.string] [honey.sql :refer [format] :rename {format sql-format}]
    [honey.sql.helpers :as sql]
-   [madek.auth.utils.core :refer [presence]]
    [madek.auth.resources.sign-in.auth-systems.auth-system.password.request :refer [password-auth-system!]]
+   [madek.auth.utils.core :refer [presence]]
    [next.jdbc :as jdbc]
-   [tick.core :as tick]
-   [taoensso.timbre :refer [error warn info debug spy]]))
+   [taoensso.timbre :refer [error warn info debug spy]]
+   [tick.core :as tick]))
 
 (spec/def ::external-base-url presence)
 (spec/def ::smtp_default_from_address presence)
