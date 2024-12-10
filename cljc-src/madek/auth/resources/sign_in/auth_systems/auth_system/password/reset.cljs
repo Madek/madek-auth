@@ -51,7 +51,8 @@
                          :routing
                          :query-params
                          (select-keys [:lang])
-                         (merge {:success true})))
+                         (merge {:success true
+                                 :email-or-login (:email-or-login @data*)})))
                :reload true)))
 
 (defn submit []
@@ -111,7 +112,7 @@
 
 (defn page []
   [:div.card-page
-   [hidden-routing-state-component :did-mount validate-token]
+   [hidden-routing-state-component :did-mount validate-token :force-routing-reset true]
    [:div.card-page__head [:h1 (translate :login-box-title)]]
    [:div.card-page__body {:style {:min-height "20em"}}
     (if (-> @state/routing* :query-params :success)
@@ -122,7 +123,7 @@
                          (some-> @state/routing*
                                  :routing
                                  :query-params
-                                 (select-keys [:lang])))}
+                                 (select-keys [:lang :email-or-login])))}
          (translate :step5-reset-password-login-link-label)]]]
       [:<>
        [:h2.form-row (translate :step5-reset-password-txt)]

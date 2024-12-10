@@ -52,25 +52,22 @@
       (sql/values [{:user_id user-id
                     :auth_system_id "password"
                     :data pw-hash}])
-      ; (sql/on-conflict :user_id :authentication_system_id)
-      ; (sql/do-update-set :data {:raw "EXCLUDED.data"})
+      (sql/on-conflict :user_id :auth_system_id)
+      (sql/do-update-set :data)
       (sql/returning :*)
-      (sql-format :inline true)))
+      sql-format))
 
-(defn set-password [tx user-id password]
-  (let [pw-hash (password-hash password tx)
-        sql-command (sql-command user-id pw-hash)
-        #_#_result (jdbc/execute! tx sql-command {:return-keys true})]
-    sql-command
-    #_{:body result}))
+(defn set-password! [tx user-id password]
+  (let [pw-hash (password-hash tx password)
+        sql-command (sql-command user-id pw-hash)]
+    (jdbc/execute! tx sql-command)))
 
 (comment (do (require '[madek.auth.db.core :as db])
-             ; (password-hash (db/get-ds) "password")
-             (sql-command #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
-                          "password")
-             ; (set-password (db/get-ds)
-             ;               #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
-             ;               "password")
+             ; (sql-command #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
+             ;              (password-hash (db/get-ds) "password"))
+             (set-password! (db/get-ds)
+                            #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
+                            "bhole")
              ))
 
 (defn post
@@ -85,8 +82,8 @@
       {:status 403,
        :body {:error_message "The token has expired."}}
 
-      :else (do #_(set-password (:user_id user) password tx)
-             {:status 200 :body "OK"}))))
+      :else (do (set-password! tx (:user_id pwd-reset) password)
+                {:status 204}))))
 
 ; ==================================================================================================
 

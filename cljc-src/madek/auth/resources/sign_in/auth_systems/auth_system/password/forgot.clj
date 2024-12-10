@@ -4,6 +4,7 @@
    [clojure.spec.alpha :as spec]
    [clojure.string] [honey.sql :refer [format] :rename {format sql-format}]
    [honey.sql.helpers :as sql]
+   [madek.auth.routes :refer [path]]
    [madek.auth.resources.sign-in.auth-systems.auth-system.password.request :refer [password-auth-system!]]
    [madek.auth.utils.core :refer [presence]]
    [next.jdbc :as jdbc]
@@ -14,17 +15,22 @@
 (spec/def ::smtp_default_from_address presence)
 
 (defn email-content [token settings]
-  (clojure.string/join "\n"
-                       ["To do Password reset click this link:"
-                        (str (->> settings :madek_external_base_url
-                                  (spec/assert ::external-base-url))
-                             "/reset-password?token="
-                             token)
-                        ""
-                        (str "Or type the token: " token)
-                        ""
-                        "If you did not request this, you can just ignore it."
-                        "Learn more: https://docs.leihs.app/passwort-reset"]))
+  (let [token-path (path :sign-in-user-auth-system-password-reset
+                         {:auth_system_type "password"
+                          :auth_system_id "password"}
+                         {:token token})]
+    (str "Hello,\n"
+         "\n"
+         "You have requested to reset your password for your account on media archive.\n"
+         "\n"
+         "Your secret token is: " token "\n"
+         "\n"
+         "To reset your password click on this link:\n"
+         (str (->> settings :madek_external_base_url (spec/assert ::external-base-url))
+              token-path
+              "\n")
+         "\n"
+         "If you did not request this, you can just ignore it.")))
 
 (def TOKEN-VALIDITY-DURATION "1 hour")
 
@@ -48,7 +54,7 @@
   (-> (sql/insert-into :emails)
       (sql/values [{:user_id user-id,
                     :to_address email,
-                    :subject "Password reset",
+                    :subject "Media archive: password reset",
                     :body (email-content token settings),
                     :from_address (->> settings
                                        :smtp_default_from_address
@@ -64,6 +70,8 @@
                  (sql/join :auth_systems_users
                            [:= :users.id :auth_systems_users.user_id])
                  (sql/where [:= :auth_systems_users.auth_system_id (:id auth-system)])
+                 (sql/where [:or [:= :users.email email-or-login]
+                                 [:= :users.login email-or-login]])
                  sql-format
                  (#(jdbc/execute-one! tx %)))]
     (let [token (-> (insert-into-user-password-resets! tx (:id user) email-or-login)
