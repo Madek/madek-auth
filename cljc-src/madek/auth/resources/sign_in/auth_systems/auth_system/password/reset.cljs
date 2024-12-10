@@ -5,6 +5,7 @@
    [madek.auth.html.forms.core :as forms]
    [madek.auth.http.client.core :as http-client]
    [madek.auth.localization :refer [translate]]
+   [madek.auth.resources.sign-in.auth-systems.auth-system.password.shared :refer [satisfies-strength?]]
    [madek.auth.routes :refer [navigate! path]]
    [madek.auth.state :as state :refer [debug?* hidden-routing-state-component]]
    [madek.auth.utils.core :refer [presence]]
@@ -99,14 +100,17 @@
         :auto-focus? true]]
       [:div.form-row
        [forms/input-component data* [:password]
+        :hint (translate :step5-reset-password-strength-hint)
         :classes "form-row"
+        :type :password
         :label (translate :step5-reset-password-new-password-input-label)
         :auto-focus? true]]])
    [:div.form-row
     [:button.primary-button {:type :submit,
                              :disabled (or (not (:token @data*))
                                            (and (:email-or-login @data*)
-                                                (not (:password @data*)))
+                                                (or (-> @data* :password presence not)
+                                                    (-> @data* :password satisfies-strength? not)))
                                            @waiting?*)}
      (translate :step1-submit-label) (when @waiting?* "...")]]])
 

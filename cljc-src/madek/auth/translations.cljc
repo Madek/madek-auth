@@ -66,6 +66,8 @@
                                       "The password has been successfully reset."]
    :step5-reset-password-login-link-label ["Klicken Sie hier, um sich anzumelden."
                                            "Click here to log in."]
+   :step5-reset-password-strength-hint ["Das Passwort muss mindestens 12 Zeichen lang sein und mindestens einen Grossbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten."
+                                        "The password must be at least 12 characters long and contain at least one uppercase letter, one lowercase letter, and one number."]
 
    :ext-redirecting ["Automatische Weiterleitung..."
                      "Redirecting..."]

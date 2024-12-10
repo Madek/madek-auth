@@ -6,6 +6,7 @@
    [honey.sql :refer [format] :rename {format sql-format}]
    [honey.sql.helpers :as sql]
    [madek.auth.resources.sign-in.auth-systems.auth-system.password.request :refer [password-auth-system!]]
+   [madek.auth.resources.sign-in.auth-systems.auth-system.password.shared :refer [satisfies-strength?]]
    [madek.auth.utils.core :refer [presence]]
    [next.jdbc :as jdbc]
    [taoensso.timbre :refer [error warn info debug spy]]
@@ -67,8 +68,8 @@
              ;              (password-hash (db/get-ds) "password"))
              (set-password! (db/get-ds)
                             #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
-                            "bhole")
-             ))
+                            "bhole"))
+         (re-matches pwd-strength-regex "0YourStringHere"))
 
 (defn post
   [{tx :tx {token :token password :password} :body :as request}]
@@ -81,6 +82,10 @@
       (tick/> (tick/now) (:valid_until pwd-reset))
       {:status 403,
        :body {:error_message "The token has expired."}}
+
+      (not (satisfies-strength? password))
+      {:status 400,
+       :body {:error_message "Password does not meet the requirements."}}
 
       :else (do (set-password! tx (:user_id pwd-reset) password)
                 {:status 204}))))

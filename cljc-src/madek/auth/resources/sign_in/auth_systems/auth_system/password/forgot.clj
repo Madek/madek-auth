@@ -4,8 +4,8 @@
    [clojure.spec.alpha :as spec]
    [clojure.string] [honey.sql :refer [format] :rename {format sql-format}]
    [honey.sql.helpers :as sql]
-   [madek.auth.routes :refer [path]]
    [madek.auth.resources.sign-in.auth-systems.auth-system.password.request :refer [password-auth-system!]]
+   [madek.auth.routes :refer [path]]
    [madek.auth.utils.core :refer [presence]]
    [next.jdbc :as jdbc]
    [taoensso.timbre :refer [error warn info debug spy]]
@@ -71,7 +71,7 @@
                            [:= :users.id :auth_systems_users.user_id])
                  (sql/where [:= :auth_systems_users.auth_system_id (:id auth-system)])
                  (sql/where [:or [:= :users.email email-or-login]
-                                 [:= :users.login email-or-login]])
+                             [:= :users.login email-or-login]])
                  sql-format
                  (#(jdbc/execute-one! tx %)))]
     (let [token (-> (insert-into-user-password-resets! tx (:id user) email-or-login)
