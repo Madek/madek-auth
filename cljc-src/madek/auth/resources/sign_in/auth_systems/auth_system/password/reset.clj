@@ -75,7 +75,6 @@
              #_(set-password! (db/get-ds)
                             #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
                             "bhole")))
-         (re-matches pwd-strength-regex "0YourStringHere"))
 
 (defn post
   [{tx :tx {token :token password :password} :body :as request}]
