@@ -65,10 +65,16 @@
 
 (comment (do (require '[madek.auth.db.core :as db])
              ; (sql-command #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
-             ;              (password-hash (db/get-ds) "password"))
-             (set-password! (db/get-ds)
+                            ;              (password-hash (db/get-ds) "password"))
+             (-> (sql/select :*)
+                 (sql/from :emails)
+                 (sql/limit 1)
+                 sql-format
+                 (->> (jdbc/execute-one! (db/get-ds)))
+                 :body)
+             #_(set-password! (db/get-ds)
                             #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
-                            "bhole"))
+                            "bhole")))
          (re-matches pwd-strength-regex "0YourStringHere"))
 
 (defn post
