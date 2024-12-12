@@ -67,7 +67,7 @@
    [:div.form-row
     [:button.primary-button
      {:type :submit}
-     (translate :step4-forgot-password-send-label)
+     (translate :forgot-password-send-label)
      (when @waiting?* "...")]]])
 
 (defn page []
@@ -80,15 +80,16 @@
     (let [email-or-login (get-in @state/routing* [:query-params :email-or-login])]
       (if email-or-login
         [:<>
-         [:h2.form-row (translate :step4-forgot-password-txt)]
+         [:h2.form-row (translate :forgot-password-txt)]
          [form email-or-login]]
         [:<>
-         [:h2.form-row (translate :step4-forgot-password-success-txt)]
+         [:h2.form-row (translate :forgot-password-success-txt)]
          [:div.form-row
+          [:div.mb-2 (translate :forgot-password-manual-entry-info)]
           [:a {:href (path :sign-in-user-auth-system-password-reset
                            (:path-params @state/routing*)
                            (select-keys (:query-params @state/routing*) [:lang]))}
-           (translate :step4-forgot-password-reset-link-label)]]]))]
+           (translate :forgot-password-reset-link-label)]]]))]
    [page-debug]])
 
 (def components

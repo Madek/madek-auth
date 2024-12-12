@@ -23,12 +23,12 @@
          "\n"
          "You have requested to reset your password for your account on media archive.\n"
          "\n"
-         "Your secret token is: " token "\n"
-         "\n"
          "To reset your password click on this link:\n"
          (str (->> settings :madek_external_base_url (spec/assert ::external-base-url))
               token-path
               "\n")
+         "\n"
+         "Enter the following code on the website in case the link does not work: " token "\n"
          "\n"
          "If you did not request this, you can just ignore it.")))
 

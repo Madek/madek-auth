@@ -43,31 +43,37 @@
    :step3-submit-label ["Anmelden"
                         "Log in"]
 
-   :step4-forgot-password-label ["Passwort vergessen?"
-                                 "Forgot password?"]
-   :step4-forgot-password-txt ["Erhalten Sie einen Bestätigungscode per E-Mail, um das Passwort zurückzusetzen."
-                               "Receive a verification code by email to reset the password."]
-   :step4-forgot-password-success-txt ["Prüfen Sie Ihren E-Mail-Posteingang!"
-                                       "Check your email inbox!"]
-   :step4-forgot-password-reset-link-label ["Klicken Sie hier, um das Passwort mit dem Token in der E-Mail zurückzusetzen."
-                                            "Click here to reset the password using the token in the email."]
-   :step4-forgot-password-send-label ["Email senden"
-                                      "Send email"]
+   :forgot-password-label ["Passwort vergessen?"
+                           "Forgot password?"]
+   :forgot-password-txt ["Erhalten Sie einen Link per E-Mail, um das Passwort zurückzusetzen."
+                         "Receive a link by email to reset the password."]
+   :forgot-password-send-label ["E-Mail senden"
+                                "Send email"]
+   :forgot-password-success-txt ["Es wurde ein Mail mit einem Link zum Zurücksetzen des Passworts gesendet. Bitte prüfen Sie Ihren E-Mail-Posteingang."
+                                 "An email with a link to reset the password has been sent. Please check your inbox."]
+   :forgot-password-manual-entry-info ["Falls der Link nicht funktionieren sollte: "
+                                       "If the link does not work: "]
+   :forgot-password-reset-link-label ["Klicken Sie hier, um den im E-Mail enthaltenen Code manuell einzugeben"
+                                      "Click here to manually enter the code included in the email"]
 
-   :step5-reset-password-txt ["Geben Sie das geheime Token ein, welches Sie per E-Mail erhalten haben."
-                              "Enter the secret token you received by email."]
-   :step5-reset-password-token-input-label ["Geheimes Token"
-                                            "Secret token"]
-   :step5-reset-password-username-input-label ["Email oder Login"
-                                               "Email or login"]
-   :step5-reset-password-new-password-input-label ["Neues Passwort"
-                                                   "New password"]
-   :step5-reset-password-success-txt ["Das Passwort wurde erfolgreich zurückgesetzt."
-                                      "The password has been successfully reset."]
-   :step5-reset-password-login-link-label ["Klicken Sie hier, um sich anzumelden."
-                                           "Click here to log in."]
-   :step5-reset-password-strength-hint ["Das Passwort muss mindestens 12 Zeichen lang sein und mindestens einen Grossbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten."
-                                        "The password must be at least 12 characters long and contain at least one uppercase letter, one lowercase letter, and one number."]
+   :reset-password-txt ["Geben Sie den Code ein, welchen Sie per E-Mail erhalten haben."
+                        "Enter the code you received by email."]
+   :reset-password-token-input-label ["Code"
+                                      "Code"]
+   :reset-password-username-input-label ["E-Mail oder Login"
+                                         "Email or login"]
+   :reset-password-new-password-input-label ["Neues Passwort"
+                                             "New password"]
+   :reset-password-message-password-required ["Passwort ist ein Pflichtfeld"
+                                              "Password is required"]
+   :reset-password-success-txt ["Das Passwort wurde erfolgreich zurückgesetzt."
+                                "The password has been successfully reset."]
+   :reset-password-login-link-label ["Klicken Sie hier, um sich anzumelden."
+                                     "Click here to log in."]
+   :reset-password-strength-hint ["Das Passwort muss mindestens 12 Zeichen lang sein und mindestens einen Grossbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten."
+                                  "The password must be at least 12 characters long and contain at least one uppercase letter, one lowercase letter, and one number."]
+   :reset-password-strength-validation-message ["Bitte Passwortregel beachten"
+                                                "Please follow the password rule"]
 
    :ext-redirecting ["Automatische Weiterleitung..."
                      "Redirecting..."]

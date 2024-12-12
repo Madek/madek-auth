@@ -14,6 +14,8 @@
 
 (def data* (ratom {}))
 (def response-data* (ratom {}))
+(def validation-message* (ratom nil))
+(def pw-strength-message* (ratom nil))
 
 (def waiting?*
   (reaction
@@ -78,8 +80,17 @@
 
 (defn form []
   [:form
-   {:on-submit (fn [e] (.preventDefault e)
-                 ((if (:email-or-login @data*) submit validate-token)))}
+   {:on-submit (fn [e]
+                 (.preventDefault e)
+                 (reset! validation-message* nil)
+                 (reset! pw-strength-message* nil)
+                 (if (:email-or-login @data*)
+                   (cond (-> @data* :password presence not)
+                         (reset! validation-message* (translate :reset-password-message-password-required))
+                         (-> @data* :password satisfies-strength? not)
+                         (reset! pw-strength-message* (translate :reset-password-strength-validation-message))
+                         :else (submit))
+                   (validate-token)))}
    (when (some-> @response-data* :status (#(> % 300)))
      [:div.form-row
       [:div.validation-message
@@ -87,7 +98,7 @@
    [:div.form-row
     [forms/input-component data* [:token]
      :classes "form-row"
-     :label (translate :step5-reset-password-token-input-label)
+     :label (translate :reset-password-token-input-label)
      :disabled (some? (:email-or-login @data*))
      :auto-focus? true]]
    (when (:email-or-login @data*)
@@ -95,23 +106,23 @@
       [:div.form-row
        [forms/input-component data* [:email-or-login]
         :classes "form-row"
-        :label (translate :step5-reset-password-username-input-label)
+        :label (translate :reset-password-username-input-label)
         :disabled true
         :auto-focus? true]]
       [:div.form-row
        [forms/input-component data* [:password]
-        :hint (translate :step5-reset-password-strength-hint)
+        :hint (translate :reset-password-strength-hint)
         :classes "form-row"
         :type :password
-        :label (translate :step5-reset-password-new-password-input-label)
+        :label (translate :reset-password-new-password-input-label)
         :auto-focus? true]]])
+   (when @validation-message*
+     [:div.form-row.validation-message @validation-message*])
+   (when (and @pw-strength-message* (-> @data* :password satisfies-strength? not))
+     [:div.form-row.validation-message @pw-strength-message*])
+
    [:div.form-row
-    [:button.primary-button {:type :submit,
-                             :disabled (or (not (:token @data*))
-                                           (and (:email-or-login @data*)
-                                                (or (-> @data* :password presence not)
-                                                    (-> @data* :password satisfies-strength? not)))
-                                           @waiting?*)}
+    [:button.primary-button {:type :submit}
      (translate :step1-submit-label) (when @waiting?* "...")]]])
 
 (defn page []
@@ -121,16 +132,16 @@
    [:div.card-page__body {:style {:min-height "20em"}}
     (if (-> @state/routing* :query-params :success)
       [:<>
-       [:h2.form-row (translate :step5-reset-password-success-txt)]
+       [:h2.form-row (translate :reset-password-success-txt)]
        [:div.form-row
         [:a {:href (path :sign-in nil
                          (some-> @state/routing*
                                  :routing
                                  :query-params
                                  (select-keys [:lang :email-or-login])))}
-         (translate :step5-reset-password-login-link-label)]]]
+         (translate :reset-password-login-link-label)]]]
       [:<>
-       [:h2.form-row (translate :step5-reset-password-txt)]
+       (when-not (-> @state/routing* :query-params :token presence) [:h2.form-row (translate :reset-password-txt)])
        [form]])]
    [page-debug]])
 

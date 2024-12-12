@@ -109,7 +109,7 @@
                             :routing
                             :query-params
                             (select-keys [:return-to :lang :email-or-login])))}
-       (translate :step4-forgot-password-label)]]
+       (translate :forgot-password-label)]]
      [:div
       [change-username-button
        {:href (path :sign-in {} (some-> @state/state* :routing
