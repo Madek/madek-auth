@@ -59,22 +59,23 @@
       sql-format))
 
 (defn set-password! [tx user-id password]
-  (let [pw-hash (password-hash tx password)
+  (let [pw-hash (password-hash tx (str password))
         sql-command (sql-command user-id pw-hash)]
     (jdbc/execute! tx sql-command)))
 
 (comment (do (require '[madek.auth.db.core :as db])
-             ; (sql-command #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
-                            ;              (password-hash (db/get-ds) "password"))
-             (-> (sql/select :*)
-                 (sql/from :emails)
-                 (sql/limit 1)
-                 sql-format
-                 (->> (jdbc/execute-one! (db/get-ds)))
-                 :body)
+             #_(sql-command #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
+                            (password-hash (db/get-ds) "password"))
+             (password-hash (db/get-ds) (str 1223))
+             #_(-> (sql/select :*)
+                   (sql/from :emails)
+                   (sql/limit 1)
+                   sql-format
+                   (->> (jdbc/execute-one! (db/get-ds)))
+                   :body)
              #_(set-password! (db/get-ds)
-                            #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
-                            "bhole")))
+                              #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
+                              "bhole")))
 
 (defn post
   [{tx :tx {token :token password :password} :body :as request}]
