@@ -66,13 +66,13 @@
 (comment (do (require '[madek.auth.db.core :as db])
              #_(sql-command #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
                             (password-hash (db/get-ds) "password"))
-             (password-hash (db/get-ds) (str 1223))
-             #_(-> (sql/select :*)
-                   (sql/from :emails)
-                   (sql/limit 1)
-                   sql-format
-                   (->> (jdbc/execute-one! (db/get-ds)))
-                   :body)
+             #_(password-hash (db/get-ds) (str 1223))
+             (-> (sql/select :*)
+                 (sql/from :emails)
+                 (sql/limit 1)
+                 sql-format
+                 (->> (jdbc/execute-one! (db/get-ds)))
+                 :body)
              #_(set-password! (db/get-ds)
                               #uuid "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
                               "bhole")))
