@@ -1,0 +1,81 @@
+(ns madek.auth.resources.sign-in.auth-systems.auth-system.password.forgot
+  (:refer-clojure :exclude [get])
+  (:require
+   [clojure.spec.alpha :as spec]
+   [clojure.string] [honey.sql :refer [format] :rename {format sql-format}]
+   [honey.sql.helpers :as sql]
+   [madek.auth.resources.sign-in.auth-systems.auth-system.password.request :refer [password-auth-system!]]
+   [madek.auth.routes :refer [path]]
+   [madek.auth.utils.core :refer [presence]]
+   [next.jdbc :as jdbc]
+   [taoensso.timbre :refer [error warn info debug spy]]
+   [tick.core :as tick]))
+
+(spec/def ::external-base-url presence)
+(spec/def ::smtp_default_from_address presence)
+
+(defn email-content [token settings]
+  (let [token-path (path :sign-in-user-auth-system-password-reset
+                         {:auth_system_type "password"
+                          :auth_system_id "password"}
+                         {:token token})]
+    (str "Hello,\n"
+         "\n"
+         "You have requested to reset your password for your account on media archive.\n"
+         "\n"
+         "To reset your password click on this link:\n"
+         (str (->> settings :madek_external_base_url (spec/assert ::external-base-url))
+              token-path
+              "\n")
+         "\n"
+         "Enter the following code on the website in case the link does not work: " token "\n"
+         "\n"
+         "If you did not request this, you can just ignore it.")))
+
+(def TOKEN-VALIDITY-DURATION "1 hour")
+
+(defn insert-into-user-password-resets!
+  [tx user-id email-or-login]
+  (-> (sql/insert-into :user_password_resets)
+      (sql/values [{:user_id [:cast user-id :uuid],
+                    :used_user_param email-or-login,
+                    :valid_until [:+ [:now] [:interval TOKEN-VALIDITY-DURATION]]}])
+      (sql/returning :token)
+      sql-format
+      (->> (jdbc/execute! tx))))
+
+(comment
+  (require '[madek.auth.db.core :as db])
+  (insert-into-user-password-resets! (db/get-ds)
+                                     "16ae30bc-8f4a-4aef-aafe-918ec1c8b03e"
+                                     "mkmit"))
+
+(defn insert-into-emails! [tx token {user-id :id email :email} settings]
+  (-> (sql/insert-into :emails)
+      (sql/values [{:user_id user-id,
+                    :to_address email,
+                    :subject "Media archive: password reset",
+                    :body (email-content token settings),
+                    :from_address (->> settings
+                                       :smtp_default_from_address
+                                       (spec/assert ::smtp_default_from_address))}])
+      sql-format
+      (->> (jdbc/execute! tx))))
+
+(defn handler [{tx :tx settings :settings
+                {email-or-login :email-or-login} :params :as request}]
+  (let [auth-system (password-auth-system! email-or-login tx)
+        user (-> (sql/select :users.*)
+                 (sql/from :users)
+                 (sql/join :auth_systems_users
+                           [:= :users.id :auth_systems_users.user_id])
+                 (sql/where [:= :auth_systems_users.auth_system_id (:id auth-system)])
+                 (sql/where [:or [:= :users.email email-or-login]
+                             [:= :users.login email-or-login]])
+                 sql-format
+                 (#(jdbc/execute-one! tx %)))]
+    (let [token (-> (insert-into-user-password-resets! tx (:id user) email-or-login)
+                    first
+                    :token)]
+      (insert-into-emails! tx token user settings))
+    {:status 200, :body {:message "OK"}}))
