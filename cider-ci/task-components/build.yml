@@ -5,6 +5,7 @@ include:
 
 traits:
   asdf: true
+  ci-ax101-06: true
 
 scripts:
   auth-build:
@@ -22,7 +23,7 @@ scripts:
       cd $AUTH_DIR
       # build uberjar
       ./bin/build
-      # test if jar exists 
+      # test if jar exists
       test -f madek-auth.jar
       # test if jar executes
       java -jar madek-auth.jar -h

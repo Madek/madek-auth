@@ -3,6 +3,7 @@ include:
 
 traits:
   curl: true
+  ci-ax101-06: true
 
 scripts:
 
