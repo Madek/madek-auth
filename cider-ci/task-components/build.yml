@@ -22,7 +22,7 @@ scripts:
       cd $AUTH_DIR
       # build uberjar
       ./bin/build
-      # test if jar exists 
+      # test if jar exists
       test -f madek-auth.jar
       # test if jar executes
       java -jar madek-auth.jar -h
