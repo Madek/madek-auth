@@ -4,6 +4,7 @@
 ;(def MAX_PART_SIZE (* 100 (Math/pow 1024 2)))
 
 (def MADEK_SESSION_COOKIE_NAME "madek-session")
+(def MADEK_RAILS_SESSION_COOKIE_NAME "_madek_session")
 
 (def MADEK_SIGNED_IN_USERS_GROUP
   {:id "84a6ce40-a441-5c28-9af3-6d5f799c4fbd"
