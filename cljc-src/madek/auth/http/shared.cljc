@@ -2,7 +2,7 @@
   (:require
    [taoensso.timbre :refer [debug error info spy warn]]))
 
-(def ANTI_CRSF_TOKEN_COOKIE_NAME "madek.auth.anti-csrf-token")
+(def ANTI_CRSF_TOKEN_COOKIE_NAME "madek-auth_anti-csrf-token")
 
 (def HTTP_UNSAFE_METHODS #{:delete :patch :post :put})
 (def HTTP_SAFE_METHODS #{:get :head :options :trace})
