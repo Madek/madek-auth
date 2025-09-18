@@ -9,6 +9,6 @@ ${PROJECT_DIR}/bin/env/clojure-setup
 ${PROJECT_DIR}/bin/env/nodejs-setup
 
 rm -rf resources/madek-auth/public/js/
-./bin/npm i
+./bin/npm ci --ignore-scripts
 ./bin/css-compile
 ./bin/npx shadow-cljs watch madek-auth

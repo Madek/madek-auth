@@ -4,7 +4,7 @@ set -euo pipefail
 PROJECT_DIR="$(cd -- "$(dirname "${BASH_SOURCE}")" ; cd .. > /dev/null 2>&1 && pwd -P)"
 ${PROJECT_DIR}/bin/env/nodejs-setup
 
-npm install
+npm ci --ignore-scripts
 
 npx "$@"
 

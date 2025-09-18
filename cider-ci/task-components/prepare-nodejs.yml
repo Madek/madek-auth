@@ -9,5 +9,5 @@ scripts:
       set -euo pipefail
       cd $AUTH_DIR
       ./bin/env/nodejs-setup
-      npm ci
+      npm ci --ignore-scripts
 
