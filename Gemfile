@@ -2,7 +2,7 @@ eval_gemfile 'datalayer/Gemfile'
 
 gem 'capybara'
 gem 'jwt'
-gem 'puma'
+gem 'puma', '~> 6.4'
 gem 'rspec'
 gem 'selenium-webdriver'
 gem 'sinatra'
