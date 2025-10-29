@@ -6,7 +6,7 @@
    [honey.sql :refer [format] :rename {format sql-format}]
    [honey.sql.helpers :as sql]
    [logbug.debug :refer [debug-ns]]
-   [madek.auth.constants :refer [MADEK_SESSION_COOKIE_NAME MADEK_SIGNED_IN_USERS_GROUP]]
+   [madek.auth.constants :refer [MADEK_SESSION_COOKIE_NAME MADEK_RAILS_SESSION_COOKIE_NAME MADEK_SIGNED_IN_USERS_GROUP]]
    [madek.auth.utils.core :refer [presence presence!]]
    [next.jdbc :as jdbc]
    [taoensso.timbre :refer [debug error info spy warn]])
@@ -77,7 +77,9 @@
                {:value token
                 :http-only true
                 :path "/"
-                :secure false}}}))
+                :secure false}
+               MADEK_RAILS_SESSION_COOKIE_NAME
+               {:path "/" :value "" :max-age 0}}}))
 
 ;#### wrap ####################################################################
 
