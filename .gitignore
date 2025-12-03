@@ -13,3 +13,4 @@ resources/auth/public/css/
 resources/auth/public/js/
 target/
 tmp/
+.vscode/
