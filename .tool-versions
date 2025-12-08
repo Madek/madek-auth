@@ -1,6 +1,6 @@
 clojure 1.11.1.1413
 firefox 140.5.0esr
 geckodriver 0.36.0
-java zulu-21.42.19
+java zulu-17.62.17
 nodejs 20.15.1
 ruby 3.1.2
