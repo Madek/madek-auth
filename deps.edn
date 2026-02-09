@@ -2,7 +2,7 @@
  :deps
  {better-cond/better-cond {:mvn/version "2.1.5"}
   buddy/buddy-sign {:mvn/version "3.4.333"}
-  clj-commons/clj-yaml {:mvn/version "1.0.26"}
+  clj-commons/clj-yaml {:mvn/version "1.0.27"}
   clj-pid/clj-pid {:mvn/version "0.1.2"}
   cljs-http/cljs-http {:mvn/version "0.1.46"}
   com.github.seancorfield/honeysql {:mvn/version "2.4.1026"}
@@ -17,12 +17,13 @@
   http-kit/http-kit {:mvn/version "2.6.0"}
   lambdaisland/uri {:mvn/version "1.15.125"}
   logbug/logbug {:mvn/version "5.0.0"}
-  metosin/reitit {:mvn/version "0.6.0"}
+  metosin/reitit {:mvn/version "0.7.1"}
   noencore/noencore {:mvn/version "0.3.7"} ; (transitive dependency of cljs-http; enforce new version to avoid :redef warnings)
   nrepl/nrepl {:mvn/version "1.0.0"}
+  org.clojure/clojure {:mvn/version "1.11.4"}
   org.clojure/core.memoize {:mvn/version "1.0.257"}
   org.clojure/tools.cli {:mvn/version "1.0.219"}
-  org.postgresql/postgresql {:mvn/version "42.6.0"}
+  org.postgresql/postgresql {:mvn/version "42.6.2"}
   reagent/reagent {:mvn/version "1.2.0"}
   ring-middleware-accept/ring-middleware-accept {:mvn/version "2.0.3"}
   ring/ring-json {:mvn/version "0.5.1"}
@@ -34,6 +35,10 @@
   :resource-paths ["resources"]
   :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "2.4.1070"}}
              :main-opts ["-m" "antq.core"]}
+  :clj-watson {:replace-deps
+               {io.github.clj-holmes/clj-watson
+                {:git/tag "v6.0.1" :git/sha "b520351"}}
+               :main-opts ["-m" "clj-watson.cli"]}
 
   :cljfmt {:extra-deps {io.github.weavejester/cljfmt
                         {:git/tag "0.12.0"
