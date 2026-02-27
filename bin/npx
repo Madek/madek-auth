@@ -6,6 +6,18 @@ ${PROJECT_DIR}/bin/env/nodejs-setup
 
 npm ci --ignore-scripts
 
+# Ensure clojure is in PATH for shadow-cljs
+source $PROJECT_DIR/bin/env/select-tool-versions-manager
+case "$TOOL_VERSIONS_MANAGER" in
+  mise)
+    eval "$(mise activate bash --shims)"
+    ;;
+  asdf|asdf-vm)
+    source "$PROJECT_DIR/bin/env/asdf-helper.bash"
+    asdf-load
+    ;;
+esac
+
 npx "$@"
 
 # vi: ft=sh
