@@ -13,7 +13,7 @@
 
 (defn password-auth-system! [email-or-login tx]
   (let [auth-system (-> (password-auth-system-query email-or-login)
-                        (sql-format :inline true)
+                        (sql-format :inline false)
                         (#(jdbc/execute-one! tx %)))]
     (when (nil? auth-system)
       (throw (let [err_message "Password authentication not available for user"]

@@ -1,17 +1,11 @@
 (ns madek.auth.resources.sign-in.auth-systems.auth-system.password.sign-in
   (:require
-   [cuerdas.core :as str]
    [honey.sql :refer [format] :rename {format sql-format}]
    [honey.sql.helpers :as sql]
-   [logbug.debug :refer [debug-ns]]
-   [madek.auth.db.core :refer [get-ds]]
    [madek.auth.http.session :refer [create-user-session-response]]
    [madek.auth.resources.sign-in.auth-systems.sql :as auth-systems-sql]
-   [madek.auth.routes :refer [path]]
-   [madek.auth.utils.core :refer [presence]]
    [next.jdbc :as jdbc]
-   [taoensso.timbre :refer [debug error info spy warn]]
-   [tick.core :as time]))
+   [taoensso.timbre :refer [debug error info spy warn]]))
 
 (defn auth-system-user-password-hash-query [email-or-login]
   (-> (sql/from :users)
@@ -38,7 +32,7 @@
   (debug auth_system_id email-or-login password)
   (if-let [res (some-> email-or-login
                        auth-system-user-password-hash-query
-                       (sql-format :inline true)
+                       (sql-format :inline false)
                        (#(jdbc/execute-one! tx %)))]
     (if (some-> (password-check-query password (:password_hash res))
                 (sql-format :inline false)

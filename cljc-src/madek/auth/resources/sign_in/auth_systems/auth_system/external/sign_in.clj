@@ -1,21 +1,14 @@
 (ns madek.auth.resources.sign-in.auth-systems.auth-system.external.sign-in
   (:require
-   [buddy.core.keys :as keys]
    [buddy.sign.jwt :as jwt]
-   [cuerdas.core :as str]
    [honey.sql :refer [format] :rename {format sql-format}]
    [honey.sql.helpers :as sql]
-   [logbug.debug :refer [debug-ns]]
-   [madek.auth.db.core :refer [get-ds]]
    [madek.auth.http.session :refer [create-user-session-response]]
    [madek.auth.resources.sign-in.auth-systems.auth-system.external.manage :refer [manage-account]]
    [madek.auth.resources.sign-in.auth-systems.auth-system.external.pki :refer [public-key!]]
    [madek.auth.resources.sign-in.auth-systems.sql :refer [auth-systems-query]]
-   [madek.auth.routes :refer [path]]
-   [madek.auth.utils.core :refer [presence]]
    [next.jdbc :as jdbc]
-   [taoensso.timbre :refer [debug error info spy warn]]
-   [tick.core :as time]))
+   [taoensso.timbre :refer [debug error info spy warn]]))
 
 (defn extended-auth-system-user-query [email-or-login auth_system_id]
   (-> email-or-login auth-systems-query
@@ -24,7 +17,7 @@
 
 (defn auth-system-user! [email-or-login auth_system_id tx]
   (let [auth-system-user (-> (extended-auth-system-user-query email-or-login auth_system_id)
-                             (sql-format :inline true)
+                             (sql-format :inline false)
                              (#(jdbc/execute-one! tx %)))]
     (when-not (:user_id auth-system-user)
       (throw (ex-info "No match of user account and authentication system"

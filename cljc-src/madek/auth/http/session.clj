@@ -5,9 +5,9 @@
    [cuerdas.core :as str]
    [honey.sql :refer [format] :rename {format sql-format}]
    [honey.sql.helpers :as sql]
-   [logbug.debug :refer [debug-ns]]
-   [madek.auth.constants :refer [MADEK_SESSION_COOKIE_NAME MADEK_RAILS_SESSION_COOKIE_NAME MADEK_SIGNED_IN_USERS_GROUP]]
-   [madek.auth.utils.core :refer [presence presence!]]
+   [madek.auth.constants :refer [MADEK_RAILS_SESSION_COOKIE_NAME
+                                 MADEK_SESSION_COOKIE_NAME
+                                 MADEK_SIGNED_IN_USERS_GROUP]]
    [next.jdbc :as jdbc]
    [taoensso.timbre :refer [debug error info spy warn]])
   (:import
@@ -111,7 +111,7 @@
 (defn user-session [token-hash tx]
   (-> token-hash
       user-session-query
-      (sql-format :inline true)
+      (sql-format :inline false)
       (#(jdbc/execute-one! tx %))))
 
 (defn session-token-hashed [request]

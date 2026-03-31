@@ -1,15 +1,11 @@
 (ns madek.auth.resources.sign-in.auth-systems.auth-system.external.manage
   (:require
-   [clojure.set :refer [rename-keys]]
-   [cuerdas.core :as str]
    [honey.sql :refer [format] :rename {format sql-format}]
    [honey.sql.helpers :as sql]
-   [logbug.debug :refer [debug-ns]]
    [madek.auth.db.core :refer [get-ds]]
    [madek.auth.utils.core :refer [presence]]
    [next.jdbc :as jdbc]
-   [taoensso.timbre :refer [debug error info spy warn]]
-   [tick.core :as time]))
+   [taoensso.timbre :refer [debug error info spy warn]]))
 
 (defn assert-property! [m k]
   (assert (get m k) (str k " is missing in map"))
@@ -118,7 +114,7 @@
   (-> (sql/select :*)
       (sql/from :groups)
       (group-where properties)
-      (sql-format :inline true)
+      (sql-format :inline false)
       ((partial jdbc/execute-one! tx))))
 
 (defn update-group [group properties tx]
@@ -169,7 +165,7 @@
   (-> (sql/insert-into :groups_users)
       (sql/values (->> group-ids
                        (map #(assoc {} :group_id % :user_id (:id user)))))
-      (sql-format :inline true)
+      (sql-format :inline false)
       (#(jdbc/execute! tx % {:return-keys true}))))
 
 (defn remove-user-from-groups [user group-ids tx]
