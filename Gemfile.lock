@@ -87,14 +87,14 @@ GEM
       public_suffix (>= 2.0.2, < 8.0)
     base32-crockford (0.1.0)
     base64 (0.3.0)
-    bcrypt (3.1.18)
+    bcrypt (3.1.22)
     bigdecimal (4.1.0)
     builder (3.3.0)
-    capybara (3.39.1)
+    capybara (3.40.0)
       addressable
       matrix
       mini_mime (>= 0.1.3)
-      nokogiri (~> 1.8)
+      nokogiri (~> 1.11)
       rack (>= 1.6.0)
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
@@ -132,7 +132,8 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.19.3)
-    jwt (2.7.0)
+    jwt (2.10.3)
+      base64
     liquid (5.5.0)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -158,9 +159,8 @@ GEM
       drb (~> 2.0)
       prism (~> 1.5)
     multi_json (1.15.0)
-    mustermann (3.0.0)
-      ruby2_keywords (~> 0.0.1)
-    net-imap (0.6.3)
+    mustermann (3.1.1)
+    net-imap (0.6.4.1)
       date
       net-protocol
     net-pop (0.1.2)
@@ -170,7 +170,7 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
-    nokogiri (1.19.2-arm64-darwin)
+    nokogiri (1.19.3-arm64-darwin)
       racc (~> 1.4)
     numerizer (0.1.1)
     pg (1.5.3)
@@ -187,19 +187,19 @@ GEM
       pry (>= 0.10.4)
     psych (3.3.4)
     public_suffix (7.0.5)
-    puma (6.6.1)
-      nio4r (~> 2.0)
     racc (1.8.1)
-    rack (2.2.23)
-    rack-protection (3.0.6)
-      rack
-    rack-session (1.0.2)
-      rack (< 3)
+    rack (3.2.6)
+    rack-protection (4.2.1)
+      base64 (>= 0.1.0)
+      logger (>= 1.6.0)
+      rack (>= 3.0.0, < 4)
+    rack-session (2.1.2)
+      base64 (>= 0.1.0)
+      rack (>= 3.0.0)
     rack-test (2.2.0)
       rack (>= 1.3)
-    rackup (1.0.1)
-      rack (< 3)
-      webrick
+    rackup (2.3.1)
+      rack (>= 3)
     rails (8.1.3)
       actioncable (= 8.1.3)
       actionmailbox (= 8.1.3)
@@ -262,7 +262,6 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.1)
-    ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     securerandom (0.4.1)
     selenium-webdriver (4.27.0)
@@ -271,21 +270,20 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sinatra (3.0.6)
+    sinatra (4.2.1)
+      logger (>= 1.6.0)
       mustermann (~> 3.0)
-      rack (~> 2.2, >= 2.2.4)
-      rack-protection (= 3.0.6)
+      rack (>= 3.0.0, < 4)
+      rack-protection (= 4.2.1)
+      rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sprockets (3.7.5)
-      base64
-      concurrent-ruby (~> 1.0)
-      rack (> 1, < 3)
+    sprockets (1.0.2)
     strong_password (0.0.10)
     temple (0.10.0)
     textacular (5.7.0)
       activerecord (>= 5.0)
     thor (1.5.0)
-    tilt (2.1.0)
+    tilt (2.7.0)
     timeout (0.6.1)
     tsort (0.2.0)
     tzinfo (2.0.6)
@@ -297,7 +295,6 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webrick (1.9.2)
     websocket (1.2.11)
     websocket-driver (0.8.0)
       base64
@@ -317,30 +314,28 @@ PLATFORMS
 
 DEPENDENCIES
   base32-crockford
-  bcrypt (~> 3.1.13)
+  bcrypt (~> 3.1.22)
   capybara
   chronic_duration
   factory_bot
   faker
   haml
-  jwt
+  jwt (~> 2.10.3)
   liquid
   listen
   mimemagic
-  nokogiri (>= 1.18.9)
   pg
   pg_tasks!
   pry
   pry-nav
   pry-rails
   psych (< 4)
-  puma (~> 6.4)
   rails (~> 8.1.0)
   rerun
   rspec
   rspec-rails (~> 7)
   selenium-webdriver
-  sinatra
+  sinatra (~> 4.2.0)
   sprockets (< 4)
   strong_password
   textacular (~> 5.0)
