@@ -187,6 +187,8 @@ GEM
       pry (>= 0.10.4)
     psych (3.3.4)
     public_suffix (7.0.5)
+    puma (7.2.1)
+      nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.6)
     rack-protection (4.2.1)
@@ -277,7 +279,6 @@ GEM
       rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sprockets (1.0.2)
     strong_password (0.0.10)
     temple (0.10.0)
     textacular (5.7.0)
@@ -330,13 +331,13 @@ DEPENDENCIES
   pry-nav
   pry-rails
   psych (< 4)
+  puma (~> 7.2.1)
   rails (~> 8.1.0)
   rerun
   rspec
   rspec-rails (~> 7)
   selenium-webdriver
   sinatra (~> 4.2.0)
-  sprockets (< 4)
   strong_password
   textacular (~> 5.0)
   uuidtools
