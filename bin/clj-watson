@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROJECT_DIR="$(cd -- "$(dirname "${BASH_SOURCE}")" ; cd .. > /dev/null 2>&1 && pwd -P)"
+
+${PROJECT_DIR}/bin/env/java-setup
+${PROJECT_DIR}/bin/env/clojure-setup
+
+CLJ_WATSON_SUPPRESSION_FILE=${PROJECT_DIR}/clj-watson/suppressions.xml \
+  CLJ_WATSON_ANALYZER_OSSINDEX_ENABLED=false \
+  clojure -M:clj-watson scan -p deps.edn -s -a cljs "$@"
+# `-a frontend` = include alias `:cljs`
+
+# vi: ft=sh
