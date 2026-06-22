@@ -19,7 +19,7 @@
                   ; "madek.auth.resources.sign-in.auth-systems.auth-system.password.forgot"
                   "madek.auth.resources.sign-in.auth-systems.auth-system.password.reset"
                   ;"madek.auth.utils.ring-audits"
-                  }:debug]
+                  } :debug]
                [#{#?(:clj "com.zaxxer.hikari.*")
                   "madek.*"} :info]
                [#{"*"} :warn]]
