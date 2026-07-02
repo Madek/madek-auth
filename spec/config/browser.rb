@@ -23,7 +23,18 @@ def set_capybara_values
 end
 
 
-firefox_bin_path = Pathname.new(`asdf where firefox`.strip).join('bin/firefox').expand_path.to_s
+def command_available?(command)
+  system("command -v #{command} >/dev/null 2>&1")
+end
+
+if command_available?('mise')
+  firefox_bin_path = Pathname.new(`mise where firefox`.strip).join('bin/firefox').expand_path.to_s
+elsif command_available?('asdf')
+  firefox_bin_path = Pathname.new(`asdf where firefox`.strip).join('bin/firefox').expand_path.to_s
+else
+  firefox_bin_path = Pathname.new(`which firefox`.strip).expand_path.to_s
+end
+
 Selenium::WebDriver::Firefox.path = firefox_bin_path
 
 Capybara.register_driver :firefox do |app|
