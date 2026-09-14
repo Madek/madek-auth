@@ -8,7 +8,7 @@
    [madek.auth.db.core :refer [get-ds]]
    [madek.auth.utils.core :refer [presence]]
    [next.jdbc :as jdbc]
-   [taoensso.timbre :refer [debug error info spy warn]]
+   [taoensso.timbre :refer [debug error info spy]]
    [tick.core :as time]))
 
 (defn assert-property! [m k]
@@ -132,17 +132,15 @@
           (#(jdbc/execute-one! tx % {:return-keys true}))))))
 
 (defn create-group
-  "Tries to create a group but may return nil if properties an not sufficient
-    or cause a collision with existing data. "
+  "Tries to create a group but may return nil if properties are not
+    sufficient. Raises on DB errors (e.g. collision with existing data),
+    since swallowing them would leave the request's tx aborted. "
   [properties tx]
   (when (:name properties)
-    (try
-      (-> (sql/insert-into :groups)
-          (sql/values [properties])
-          (sql-format :inline false)
-          (#(jdbc/execute-one! tx % {:return-keys true})))
-      (catch Exception ex
-        (warn "Failed to create group" ex)))))
+    (-> (sql/insert-into :groups)
+        (sql/values [properties])
+        (sql-format :inline false)
+        (#(jdbc/execute-one! tx % {:return-keys true})))))
 
 (defn create-or-update-group
   "If necessary updates or tries to create a group according to properties.
