@@ -1,5 +1,5 @@
 traits:
-  asdf: true
+  mise: true
 
 scripts:
   madek-auth_prepare-clojure:
