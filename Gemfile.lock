@@ -320,7 +320,6 @@ DEPENDENCIES
   factory_bot
   faker
   haml
-  json (< 3)
   jwt (~> 2.10.3)
   liquid
   listen
