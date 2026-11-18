@@ -23,6 +23,9 @@ feature 'Sign in with expired password'  do
     visit '/auth/sign-in?return-to=%2Fauth%2Finfo&foo=42'
     fill_in 'email-or-login', with: @user.email
     click_on 'Weiter'
+    # Wait until password auth-system request succeeded; otherwise expiring
+    # mid-flight makes /request fail with a different 401 message than /sign-in.
+    expect(page).to have_content AuthSystem.find('password').name
     ActiveRecord::Base.connection.execute <<-SQL.strip_heredoc
       UPDATE auth_systems_users SET expires_at = now() - Interval '1 hour'
       WHERE auth_systems_users.auth_system_id = 'password'
