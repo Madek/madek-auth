@@ -23,7 +23,7 @@
       (sql/where [:= :auth_systems.id auth_system_id])))
 
 (defn claims! [email-or-login sign-in-url return-to]
-  {:exp (time/>> (time/now) (time/of-seconds 90))
+  {:exp (time/>> (time/now) (time/of-seconds 300))
    :iat (time/now)
    :return-to (presence return-to)
    :email-or-login email-or-login
