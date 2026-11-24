@@ -21,7 +21,7 @@
 
 (defn run [options]
   (def ^:dynamic options options)
-  (info "run with options:" (str options))
+  (info "run with options:" (str (update options :db-password db/mask-secret)))
   (exit/init options)
   (.addShutdownHook (Runtime/getRuntime) (Thread. #(shutdown)))
   (state/init options)
